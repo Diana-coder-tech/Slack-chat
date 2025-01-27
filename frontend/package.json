@@ -9,7 +9,7 @@
   "main": "eslint.config.js",
   "scripts": {
     "build": "vite build",
-    "start": "vite start",
+    "start": "npx start-server -s ./dist",
     "lint": "eslint .",
     "preview": "vite preview"
   },
