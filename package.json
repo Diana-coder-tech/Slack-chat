@@ -1,0 +1,23 @@
+{
+  "name": "@hexlet/code",
+  "version": "1.0.0",
+  "description": "chat - slack",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run build",
+    "start": "npx start-server -s ./frontend/dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+  "node": ">=18.18.0 <22.12.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "frontend-project-12"
+  },
+  "author": "Diana Zhiliakova",
+  "license": "ISC",
+  "dependencies": {
+    "@hexlet/chat-server": "^2.0.4"
+  }
+}
