@@ -4,6 +4,7 @@
   "description": "chat - slack",
   "main": "index.js",
   "scripts": {
+    "render-postbuild": "npm install --prefix frontend --production=false && cd /home/diana_zh/frontend-project-12/frontend && npm run build",
     "build": "npm run build --prefix frontend",
     "start": "npx start-server -s ./frontend/dist",
     "test": "echo \"Error: no test specified\" && exit 1"
