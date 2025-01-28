@@ -18,5 +18,6 @@ export default defineConfig({
         rewriteWsOrigin: true,
       },
     },
+    historyApiFallback: true,
   },
 });
