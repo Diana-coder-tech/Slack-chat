@@ -1,8 +1,8 @@
-make build:
-	npm run build
+start:
+	npx start-server
 
-make start:
-	npx start-server -s ./frontend/dist
+build:
+	npm run build
 
 lint:
 	npx eslint --ext js
