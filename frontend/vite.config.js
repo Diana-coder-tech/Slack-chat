@@ -10,10 +10,13 @@ export default defineConfig({
       // Проксируем запросы к API
       '/api': {
         target: 'http://localhost:5001',
+        changeOrigin: true, // Изменяем origin для запросов
+        rewrite: (path) => path.replace(/^\/api/, '/api'), 
       },
       // Проксируем WebSocket соединения
-      '/socket.io': {
+      '/ws': {
         target: 'ws://localhost:5001',
+        rewrite: (path) => path.replace(/^\/ws/, ''),
         ws: true,
         rewriteWsOrigin: true,
       },

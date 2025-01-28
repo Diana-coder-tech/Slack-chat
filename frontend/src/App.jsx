@@ -1,23 +1,31 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login.jsx';
 import NotFound from './pages/NotFound.jsx';
+import Chat from './pages/Chat.jsx';
 import './App.css';
+
+const ProtectedRoute = ({ children }) => {
+  const token = localStorage.getItem('token');
+  return token ? children : <Navigate to="/login" />;
+};
 
 function App() {
   return (
     <Router>
       <Routes>
+        {/* Защищенный маршрут для главной страницы */}
         <Route
           path="/"
           element={
-            <div>
-              <h1>Добро пожаловать в чат!</h1>
-              <p>Перейти на <a href="/login">страницу авторизации</a>.</p>
-            </div>
+            <ProtectedRoute>
+              <Chat />
+            </ProtectedRoute>
           }
         />
+        {/* Маршрут для страницы авторизации */}
         <Route path="/login" element={<Login />} />
+        {/* Маршрут для страницы 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
