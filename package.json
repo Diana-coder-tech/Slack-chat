@@ -14,12 +14,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "frontend-project-12"
+    "url": "git+https://github.com/Diana-coder-tech/frontend-project-12.git"
   },
   "author": "Diana Zhiliakova",
   "license": "ISC",
+  "type": "module",
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@hexlet/chat-server": "^2.0.4",
+    "@rollbar/react": "^0.12.0-beta",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "rollbar": "^2.26.4",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "vite": "^6.0.5"
   }
 }

@@ -3,3 +3,6 @@ make build:
 
 make start:
 	npx start-server -s ./frontend/dist
+
+make install:
+	npm ci
