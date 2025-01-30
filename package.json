@@ -28,7 +28,6 @@
     "express": "^4.21.2",
     "i18next": "^24.2.2",
     "react-i18next": "^15.4.0",
-    "react-scripts": "^5.0.1",
     "rollbar": "^2.26.4",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
