@@ -10,15 +10,19 @@ export default defineConfig({
     },
   },
   server: {
+    port: 5002,
     proxy: {
       '/api': {
-        target: 'http://localhost:5001',
-        changeOrigin: true,
+        target: 'http://172.25.168.98',
+        changeOrigin: false,
+        secure: false,
       },
+      cors: false,
       '/socket.io': {
-        target: 'http://localhost:5001',
+        // target: 'ws://localhost:5001',
+        target: 'http://172.25.168.98',
         ws: true,
-        changeOrigin: true,
+        rewriteWsOrigin: true,
       },
     },
   },
