@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import i18next from 'i18next';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
-import { ErrorBoundary } from '@rollbar/react';
 
 import { io } from 'socket.io-client';
 import resources from './locales/index.js';
@@ -15,10 +14,6 @@ import { actions as messagesActions } from './slices/messagesSlice.js';
 import { actions as channelsActions } from './slices/channelsSlice';
 import { FilterProvider } from './providers/FilterProvider.jsx';
 
-const RollbarConfig = {
-  accessToken: import.meta.env.REACT_APP_ROLLBAR_TOKEN,
-  environment: import.meta.env.MODE,
-};
 
 const SocketEventsHandler = () => {
   useEffect(() => {
@@ -66,7 +61,6 @@ const init = async () => {
   });
 
   return (
-    <ErrorBoundary config={RollbarConfig}>
       <Provider store={store}>
         <AuthProvider>
           <FilterProvider>
@@ -79,7 +73,6 @@ const init = async () => {
           </FilterProvider>
         </AuthProvider>
       </Provider>
-    </ErrorBoundary>
   );
 };
 
