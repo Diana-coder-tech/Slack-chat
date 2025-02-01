@@ -4,14 +4,16 @@ const ChannelsBody = ({ channels, currentChannelId, renderChannel }) => {
   const channelsRef = useRef(null);
 
   useEffect(() => {
-    const activeChannelElement = channelsRef.current.querySelector(
-      `[data-channel-id="${currentChannelId}"]`,
-    );
+    if (currentChannelId !== null) {
+      const activeChannelElement = channelsRef.current.querySelector(
+        `[data-channel-id="${currentChannelId}"]`
+      );
 
-    if (activeChannelElement) {
-      activeChannelElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      if (activeChannelElement) {
+        activeChannelElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
     }
-  }, [channels, currentChannelId]);
+  }, [currentChannelId]);  // Отслеживаем только изменение currentChannelId
 
   return (
     <div

@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Dropdown, ButtonGroup, Button, Col, Nav,
 } from 'react-bootstrap';
@@ -57,12 +57,14 @@ const OpenChannel = ({
   );
 };
 
-const Channels = ({ channels, currentChannelId }) => {
+const Channels = ({ channels }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const channelsRef = useRef(null);
+
+  const [currentChannelId, setCurrentChannelId] = useState(null);
 
   const handleSelect = (id) => () => {
+    setCurrentChannelId(id);
     dispatch(channelsActions.changeChannel(id));
   };
 
@@ -93,13 +95,13 @@ const Channels = ({ channels, currentChannelId }) => {
   };
 
   useEffect(() => {
-    const activeChannelElement = channelsRef.current.querySelector(
-      `[data-channel-id="${currentChannelId}"]`,
-    );
-    if (activeChannelElement) {
-      activeChannelElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    if (currentChannelId !== null) {
+      const activeChannelElement = document.querySelector(`[data-channel-id="${currentChannelId}"]`);
+      if (activeChannelElement) {
+        activeChannelElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
     }
-  }, [channels, currentChannelId]);
+  }, [currentChannelId]);
 
   return (
     <Col className="col-4 col-md-2 border-end px-0 flex-column h-100 d-flex bg-light">
@@ -127,7 +129,6 @@ const Channels = ({ channels, currentChannelId }) => {
         variant="pills"
         id="channels-box"
         className="flex-column nav-fill px-2 mb-3 overflow-auto h-100 d-block"
-        ref={channelsRef}
       >
         {channels.map(({ id, name, removable }) => {
           const Channel = removable ? OpenChannel : CloseChannel;
@@ -135,10 +136,9 @@ const Channels = ({ channels, currentChannelId }) => {
             <Nav.Item
               key={id}
               className="w-100"
-              data-channel-id={id} // Добавлено для скролла
+              data-channel-id={id} // Для правильного скролла
             >
               <Channel
-                key={id}
                 name={name}
                 sharedClasses={sharedClasses}
                 activeClass={id === currentChannelId}

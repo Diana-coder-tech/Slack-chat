@@ -6,9 +6,10 @@ import { toast } from 'react-toastify';
 
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 
-import { useApi } from '../../../hooks/index.jsx';
-
+import { useApi, useAuth } from '../../../hooks/index.jsx';
+import { routes } from '../../../routes/routes.js';
 import { customSelectors } from '../../../slices/channelsSlice';
 
 const schema = (channels) => yup.object().shape({
@@ -23,6 +24,8 @@ const schema = (channels) => yup.object().shape({
 const Add = ({ handleClose }) => {
   const { t } = useTranslation();
   const api = useApi();
+  const auth = useAuth();
+  const navigate = useNavigate();
 
   const inputRef = useRef(null);
 
@@ -52,8 +55,9 @@ const Add = ({ handleClose }) => {
       } catch (error) {
         formik.setSubmitting(false);
 
-        if (error.isAxiosError && error.response.status === 401) {
-          inputRef.current.select();
+        if (error.isAxiosError && error.response?.status === 401) {
+          auth.logOut(); // Очищаем данные пользователя
+          navigate(routes.loginPage()); // Перенаправляем на страницу логина
           toast.error(t('notify.unauthorized'));
         } else {
           toast.error(t('notify.networkError'));
@@ -68,9 +72,7 @@ const Add = ({ handleClose }) => {
         <Modal.Title>{t('ui.addChannel')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form
-          onSubmit={formik.handleSubmit}
-        >
+        <Form onSubmit={formik.handleSubmit}>
           <Form.Group controlId="name">
             <Form.Control
               className="mb-2"
@@ -82,29 +84,15 @@ const Add = ({ handleClose }) => {
               isInvalid={formik.errors.name && formik.touched.name}
               disabled={formik.isSubmitting}
             />
-            <Form.Label
-              visuallyHidden
-            >
-              {t('ui.nameChannel')}
-            </Form.Label>
+            <Form.Label visuallyHidden>{t('ui.nameChannel')}</Form.Label>
             <Form.Control.Feedback type="invalid">
               {t(formik.errors.name)}
             </Form.Control.Feedback>
-            <div
-              className="d-flex justify-content-end"
-            >
-              <Button
-                className="me-2"
-                variant="secondary"
-                type="button"
-                onClick={handleClose}
-              >
+            <div className="d-flex justify-content-end">
+              <Button className="me-2" variant="secondary" type="button" onClick={handleClose}>
                 {t('buttons.cancel')}
               </Button>
-              <Button
-                variant="primary"
-                type="submit"
-              >
+              <Button variant="primary" type="submit">
                 {t('buttons.submit')}
               </Button>
             </div>

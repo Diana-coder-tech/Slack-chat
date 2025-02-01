@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   Button, Form, Card, Image,
 } from 'react-bootstrap';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
@@ -46,10 +46,9 @@ const LoginPage = () => {
       } catch (err) {
         formik.setSubmitting(false);
 
-        if (err.isAxiosError && err.response.status === 401) {
+        if (err.isAxiosError && err.response?.status === 401) {
           setAuthFailed(true);
           inputRef.current.select();
-
           return;
         }
         toast.error(t('notify.networkError'));
@@ -95,7 +94,7 @@ const LoginPage = () => {
                       isInvalid={authFailed}
                     />
                     <Form.Label>{t('fields.nickname')}</Form.Label>
-                    <Form.Control.Feedback type="invalid" className="invalid-feedback" tooltip={formik.errors.username && formik.touched.username}>
+                    <Form.Control.Feedback type="invalid" tooltip={formik.errors.username && formik.touched.username}>
                       {formik.errors.username}
                     </Form.Control.Feedback>
                   </Form.Group>
@@ -136,7 +135,8 @@ const LoginPage = () => {
             <Card.Footer className="p-4">
               <div className="text-center">
                 <span>{t('ui.noAccount')}</span>
-                <a href={routes.signUpPage()}>{t('ui.registration')}</a>
+                {' '}
+                <Link to={routes.signUpPage()}>{t('ui.registration')}</Link>
               </div>
             </Card.Footer>
           </Card>
