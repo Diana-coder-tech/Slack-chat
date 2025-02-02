@@ -1,9 +1,4 @@
-import {
-  useState,
-  useMemo,
-  useCallback,
-  useEffect,
-} from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
@@ -15,19 +10,16 @@ const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
+  // Получаем пользователя из локального хранилища
   const currentUser = JSON.parse(localStorage.getItem("userId"));
-  const [user, setUser] = useState(currentUser);
+  const token = localStorage.getItem("userToken");
 
-  const saveAuthHeaders = useCallback((headers) => {
-    if (headers?.Authorization) {
-      const token = headers.Authorization.split(" ")[1];
-      localStorage.setItem("userToken", token);
-      setUser((prevUser) => ({ ...prevUser, token }));
-    }
-  }, []);
+  // Устанавливаем состояние пользователя
+  const [user, setUser] = useState(currentUser ? { ...currentUser, token } : null);
 
   const logIn = useCallback((data) => {
     localStorage.setItem("userId", JSON.stringify(data));
+    localStorage.setItem("userToken", data.token);
     setUser(data);
   }, []);
 
@@ -39,19 +31,8 @@ const AuthProvider = ({ children }) => {
   }, [dispatch]);
 
   const getAuthHeader = useCallback(() => {
-    const token = localStorage.getItem("userToken");
-    return token ? { Authorization: `Bearer ${token}` } : {};
-  }, []);
-
-  /**
-   * 🔥 Загружаем токен при монтировании
-   */
-  useEffect(() => {
-    const headers = getAuthHeader();
-    if (headers.Authorization) {
-      saveAuthHeaders(headers);
-    }
-  }, [getAuthHeader, saveAuthHeaders]);
+    return user?.token ? { Authorization: `Bearer ${user.token}` } : {};
+  }, [user]);
 
   const context = useMemo(
     () => ({
@@ -59,9 +40,8 @@ const AuthProvider = ({ children }) => {
       logIn,
       logOut,
       getAuthHeader,
-      saveAuthHeaders,
     }),
-    [user, logIn, logOut, getAuthHeader, saveAuthHeaders]
+    [user, logIn, logOut, getAuthHeader]
   );
 
   return <AuthContext.Provider value={context}>{children}</AuthContext.Provider>;

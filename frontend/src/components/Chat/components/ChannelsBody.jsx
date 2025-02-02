@@ -1,19 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 
-const ChannelsBody = ({ channels, currentChannelId, renderChannel }) => {
+const ChannelsBody = ({ channels, renderChannel }) => {
   const channelsRef = useRef(null);
-
-  useEffect(() => {
-    if (currentChannelId !== null) {
-      const activeChannelElement = channelsRef.current.querySelector(
-        `[data-channel-id="${currentChannelId}"]`
-      );
-
-      if (activeChannelElement) {
-        activeChannelElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-    }
-  }, [currentChannelId]);  // Отслеживаем только изменение currentChannelId
 
   return (
     <div

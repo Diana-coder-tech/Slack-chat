@@ -1,9 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import ChatRoute from "../routes/ChatRoute.jsx";
 import MainRoute from "../routes/MainRoute.jsx";
+import PrivateRoute from "../routes/PrivateRoute.jsx";
 import { routes } from "../routes/routes.js";
 
 import LoginPage from "./Login/LoginPage.jsx";
@@ -25,8 +26,10 @@ const App = () => {
               <Route path={routes.loginPage()} element={<LoginPage />} />
               <Route path={routes.signUpPage()} element={<SignUpPage />} />
             </Route>
-            <Route element={<ChatRoute />}>
-              <Route path={routes.chatPage()} element={<ChatPage />} />
+            <Route element={<PrivateRoute />}>
+              <Route element={<ChatRoute />}>
+                <Route path={routes.chatPage()} element={<ChatPage />} />
+              </Route>
             </Route>
           </Routes>
         </Router>

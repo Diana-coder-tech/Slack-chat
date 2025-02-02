@@ -67,19 +67,12 @@ const Content = () => {
 const ChatPage = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { getAuthHeader, logOut } = useAuth();
+  const { getAuthHeader } = useAuth();
 
   useEffect(() => {
     dispatch(fetchChannels(getAuthHeader()));
     dispatch(fetchMessages(getAuthHeader()));
   }, [dispatch, getAuthHeader]);
-
-  const loadingState = useSelector(loadingStateSelectors.getStatus);
-
-  if (loadingState === stateLoad.error || loadingState === stateLoad.fail) {
-    toast.error(t('notify.unauthorized'));
-    logOut();
-  }
 
   return (
     <Container className="h-100 my-4 overflow-hidden rounded shadow">

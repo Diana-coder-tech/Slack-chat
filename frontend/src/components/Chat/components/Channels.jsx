@@ -1,19 +1,15 @@
-/* eslint-disable import/no-extraneous-dependencies */
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   Dropdown, ButtonGroup, Button, Col, Nav,
 } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import cn from 'classnames';
 import filter from 'leo-profanity';
-import { actions as channelsActions } from '../../../slices/channelsSlice.js';
+import { actions as channelsActions, customSelectors as channelsSelectors } from '../../../slices/channelsSlice.js';
 import { actions as modalActions } from '../../../slices/modalSlice.js';
 
-const CloseChannel = ({
-  name, sharedClasses, activeClass, handleSelect,
-}) => (
+const CloseChannel = ({ name, sharedClasses, activeClass, handleSelect }) => (
   <Button
     variant={activeClass ? 'secondary' : ''}
     className={cn(sharedClasses)}
@@ -31,10 +27,7 @@ const OpenChannel = ({
   const cleanedName = typeof name === 'string' ? filter.clean(name) : '';
 
   return (
-    <Dropdown
-      as={ButtonGroup}
-      className="d-flex"
-    >
+    <Dropdown as={ButtonGroup} className="d-flex">
       <Button
         variant={activeClass ? 'secondary' : ''}
         className={cn(sharedClasses, { 'text-truncate': true })}
@@ -45,7 +38,7 @@ const OpenChannel = ({
       </Button>
       <Dropdown.Toggle
         variant={activeClass ? 'secondary' : ''}
-        id="react-aria9230295641-1"
+        id="channel-dropdown"
       >
         <span className="visually-hidden">{t('buttons.channelManagement')}</span>
       </Dropdown.Toggle>
@@ -61,10 +54,10 @@ const Channels = ({ channels }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const [currentChannelId, setCurrentChannelId] = useState(null);
+  // Теперь берем текущий канал из Redux-хранилища
+  const currentChannelId = useSelector(channelsSelectors.currentChannelId);
 
   const handleSelect = (id) => () => {
-    setCurrentChannelId(id);
     dispatch(channelsActions.changeChannel(id));
   };
 
@@ -73,19 +66,11 @@ const Channels = ({ channels }) => {
   };
 
   const handleRename = (id, name) => () => {
-    const context = {
-      channelId: id,
-      channelName: name,
-    };
-    dispatch(modalActions.open({ type: 'renaming', context }));
+    dispatch(modalActions.open({ type: 'renaming', context: { channelId: id, channelName: name } }));
   };
 
   const handleRemove = (id, name) => () => {
-    const context = {
-      channelId: id,
-      channelName: name,
-    };
-    dispatch(modalActions.open({ type: 'removing', context }));
+    dispatch(modalActions.open({ type: 'removing', context: { channelId: id, channelName: name } }));
   };
 
   const sharedClasses = {
@@ -107,18 +92,8 @@ const Channels = ({ channels }) => {
     <Col className="col-4 col-md-2 border-end px-0 flex-column h-100 d-flex bg-light">
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
         <b>{t('ui.channels')}</b>
-        <Button
-          className="p-0 text-primary"
-          variant="group-vertical"
-          onClick={handleAdd}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            width="20"
-            height="20"
-            fill="currentColor"
-          >
+        <Button className="p-0 text-primary" variant="group-vertical" onClick={handleAdd}>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
             <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
           </svg>
@@ -133,11 +108,7 @@ const Channels = ({ channels }) => {
         {channels.map(({ id, name, removable }) => {
           const Channel = removable ? OpenChannel : CloseChannel;
           return (
-            <Nav.Item
-              key={id}
-              className="w-100"
-              data-channel-id={id} // Для правильного скролла
-            >
+            <Nav.Item key={id} className="w-100" data-channel-id={id}>
               <Channel
                 name={name}
                 sharedClasses={sharedClasses}
