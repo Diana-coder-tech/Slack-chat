@@ -41,10 +41,7 @@ const SocketEventsHandler = () => {
     });
 
     return () => {
-      socket.off('newMessage');
-      socket.off('newChannel');
-      socket.off('removeChannel');
-      socket.off('renameChannel');
+      socket.disconnect(); // Отключаем сокет при размонтировании
     };
   }, []);
 
