@@ -55,7 +55,7 @@ const Channels = ({ channels }) => {
   const { t } = useTranslation();
 
   // Теперь берем текущий канал из Redux-хранилища
-  const currentChannelId = useSelector(channelsSelectors.currentChannelId);
+  const currentChannelId = useSelector((state) => state.channels.currentChannelId);
 
   const handleSelect = (id) => () => {
     dispatch(channelsActions.changeChannel(id));
