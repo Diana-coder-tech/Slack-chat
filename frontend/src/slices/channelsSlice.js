@@ -22,7 +22,7 @@ const channelsSlice = createSlice({
         newState.currentChannelId = newState.ids[0] || null;
       }
       channelsAdapter.removeOne(newState, payload);
-      return newState;
+      return newState; // Возвращаем измененное состояние
     },
     changeChannel: (state, { payload }) => ({
       ...state,
@@ -32,8 +32,10 @@ const channelsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchChannels.fulfilled, (state, { payload }) => {
       console.log('Каналы загружены:', payload); // Проверка загруженных каналов
-      channelsAdapter.setAll(state, payload);
-      state.currentChannelId = payload.length > 0 ? payload[0].id : null;
+      const newState = { ...state };
+      channelsAdapter.setAll(newState, payload);
+      newState.currentChannelId = payload.length > 0 ? payload[0].id : null;
+      return newState; // Возвращаем измененное состояние
     });
   },
 });
