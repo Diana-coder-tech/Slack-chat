@@ -25,10 +25,12 @@ const channelsSlice = createSlice({
     renameChannel: (state, { payload }) => {
       const { id, name } = payload;
       if (state.entities[id]) {
-        channelsAdapter.updateOne(state, {
-          id,
-          changes: { name },
-        });
+        channelsAdapter.updateOne(state, { id, changes: { name } });
+
+        // Обновляем currentChannelId только если изменяем текущий канал
+        if (state.currentChannelId === id) {
+          state.currentChannelId = id;
+        }
       }
     },
     removeChannel: (state, { payload }) => {
