@@ -13,12 +13,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { actions as messagesActions } from './slices/messagesSlice.js';
 import { actions as channelsActions } from './slices/channelsSlice';
 import { FilterProvider } from './providers/FilterProvider.jsx';
-
+ 
 
 const SocketEventsHandler = () => {
   useEffect(() => {
     const socket = io();
-
     socket.on('newMessage', (payload) => {
       store.dispatch(messagesActions.addMessage(payload));
     });

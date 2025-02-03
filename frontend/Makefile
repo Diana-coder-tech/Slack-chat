@@ -5,4 +5,4 @@ build:
 	npm run build
 
 lint:
-	npx eslint --ext js
+	npx eslint

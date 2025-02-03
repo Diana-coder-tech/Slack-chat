@@ -4,7 +4,6 @@ import { Container, Row, Button } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 
 import { useAuth } from '../../hooks/index.jsx';
 
@@ -65,7 +64,6 @@ const Content = () => {
 };
 
 const ChatPage = () => {
-  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { getAuthHeader } = useAuth();
 

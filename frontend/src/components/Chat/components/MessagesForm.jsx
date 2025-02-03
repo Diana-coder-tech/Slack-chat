@@ -48,6 +48,7 @@ const MessagesForm = ({ channelId }) => {
           inputRef.current.focus();
         }, 100);
       } catch (error) {
+        console.error(error);
         toast.error(t('notify.networkError'));
       }
     },

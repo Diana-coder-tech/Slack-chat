@@ -1,14 +1,11 @@
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { toast } from "react-toastify";
-import { useTranslation } from "react-i18next";
 
 import { AuthContext } from "../contexts/index.jsx";
 import { actions as loadingStateActions } from "../slices/loadingStateSlice.js";
 
 const AuthProvider = ({ children }) => {
   const dispatch = useDispatch();
-  const { t } = useTranslation();
 
   // Получаем пользователя из локального хранилища
   const currentUser = JSON.parse(localStorage.getItem("userId"));

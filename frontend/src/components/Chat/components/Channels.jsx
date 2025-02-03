@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import cn from 'classnames';
 import filter from 'leo-profanity';
-import { actions as channelsActions, customSelectors as channelsSelectors } from '../../../slices/channelsSlice.js';
+import { actions as channelsActions } from '../../../slices/channelsSlice.js';
 import { actions as modalActions } from '../../../slices/modalSlice.js';
 
 const CloseChannel = ({ name, sharedClasses, activeClass, handleSelect }) => (
