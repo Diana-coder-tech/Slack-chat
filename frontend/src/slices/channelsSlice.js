@@ -1,7 +1,7 @@
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
-import { createSelector } from 'reselect'; // Добавлено: импорт createSelector
+import { createSelector } from 'reselect';
 
-import { fetchChannels } from './fetchData.js'; // Импортируем новый асинхронный thunk
+import { fetchChannels } from './fetchData.js';
 
 const channelsAdapter = createEntityAdapter();
 
@@ -17,29 +17,29 @@ const channelsSlice = createSlice({
     addChannel: channelsAdapter.addOne,
     renameChannel: channelsAdapter.updateOne,
     removeChannel: (state, { payload }) => {
-      if (state.currentChannelId === payload) {
-        const newCurrentChannelId = state.ids[0];
-      
-        state.currentChannelId = newCurrentChannelId;
+      const newState = { ...state };
+      if (newState.currentChannelId === payload) {
+        newState.currentChannelId = newState.ids[0] || null;
       }
-      channelsAdapter.removeOne(state, payload);
+      channelsAdapter.removeOne(newState, payload);
+      return newState;
     },
-    changeChannel: (state, { payload }) => {
-      state.currentChannelId = payload;
-    },
+    changeChannel: (state, { payload }) => ({
+      ...state,
+      currentChannelId: payload,
+    }),
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchChannels.fulfilled, (state, { payload }) => {
-      channelsAdapter.setAll(state, payload);
-      state.currentChannelId = payload.length > 0 ? payload[0].id : null;
-    });
+    builder.addCase(fetchChannels.fulfilled, (state, { payload }) => ({
+      ...channelsAdapter.setAll(state, payload),
+      currentChannelId: payload.length > 0 ? payload[0].id : null,
+    }));
   },
 });
 
 export const { actions } = channelsSlice;
 const selectors = channelsAdapter.getSelectors((state) => state.channels);
 
-// Изменено: мемоизация channelsNames с помощью createSelector
 export const customSelectors = {
   allChannels: selectors.selectAll,
   channelsNames: createSelector(

@@ -10,12 +10,12 @@ import { actions as channelsActions } from '../../../slices/channelsSlice.js';
 import { actions as modalActions } from '../../../slices/modalSlice.js';
 
 const CloseChannel = ({
-  name, sharedClasses, activeClass, handleSelect
+  name, sharedClasses, activeClass, handleSelect,
 }) => (
   <Button
     variant={activeClass ? 'secondary' : ''}
     className={cn(
-      sharedClasses
+      sharedClasses,
     )}
     onClick={handleSelect}
   >
