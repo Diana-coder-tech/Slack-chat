@@ -12,7 +12,8 @@ import { actions as modalActions } from '../../../slices/modalSlice.js';
 const CloseChannel = ({ name, sharedClasses, activeClass, handleSelect }) => (
   <Button
     variant={activeClass ? 'secondary' : ''}
-    className={cn(sharedClasses)}
+    className={cn(
+      sharedClasses,)}
     onClick={handleSelect}
   >
     <span className="me-1">#</span>
@@ -30,7 +31,12 @@ const OpenChannel = ({
     <Dropdown as={ButtonGroup} className="d-flex">
       <Button
         variant={activeClass ? 'secondary' : ''}
-        className={cn(sharedClasses, { 'text-truncate': true })}
+        className={cn(
+          sharedClasses,
+          { 
+            'text-truncate': true 
+          }
+        )}
         onClick={handleSelect}
       >
         <span className="me-1">#</span>

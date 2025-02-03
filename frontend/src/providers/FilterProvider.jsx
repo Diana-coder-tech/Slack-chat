@@ -16,4 +16,4 @@ const FilterProvider = ({ children }) => {
   return <FilterContext.Provider value={filter}>{children}</FilterContext.Provider>;
 };
 
-export { FilterProvider };
+export default FilterProvider;

@@ -1,5 +1,3 @@
- 
-
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect'; // Добавлено: импорт createSelector
 
@@ -21,21 +19,22 @@ const channelsSlice = createSlice({
     removeChannel: (state, { payload }) => {
       if (state.currentChannelId === payload) {
         const newCurrentChannelId = state.ids[0];
+         
         state.currentChannelId = newCurrentChannelId;
       }
       channelsAdapter.removeOne(state, payload);
     },
     changeChannel: (state, { payload }) => {
+       
       state.currentChannelId = payload;
     },
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(fetchChannels.fulfilled, (state, { payload }) => {
-        channelsAdapter.setAll(state, payload); // Обновляем каналы
-        state.currentChannelId = payload.length > 0 ? payload[0].id : null;
-        // Устанавливаем первый канал активным
-      });
+    builder.addCase(fetchChannels.fulfilled, (state, { payload }) => {
+      channelsAdapter.setAll(state, payload);
+       
+      state.currentChannelId = payload.length > 0 ? payload[0].id : null;
+    });
   },
 });
 
@@ -51,7 +50,6 @@ export const customSelectors = {
   ),
   currentChannel: (state) => {
     const { currentChannelId } = state.channels;
-
     return selectors.selectById(state, currentChannelId);
   },
 };

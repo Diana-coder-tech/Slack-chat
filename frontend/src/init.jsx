@@ -12,8 +12,7 @@ import App from './components/App.jsx';
 import 'react-toastify/dist/ReactToastify.css';
 import { actions as messagesActions } from './slices/messagesSlice.js';
 import { actions as channelsActions } from './slices/channelsSlice';
-import { FilterProvider } from './providers/FilterProvider.jsx';
- 
+import FilterProvider from './providers/FilterProvider.jsx';
 
 const SocketEventsHandler = () => {
   useEffect(() => {
@@ -57,18 +56,18 @@ const init = async () => {
   });
 
   return (
-      <Provider store={store}>
-        <AuthProvider>
-          <FilterProvider>
-            <I18nextProvider i18n={i18n}>
-              <SocketEventsHandler />
-              <ApiProvider>
-                <App />
-              </ApiProvider>
-            </I18nextProvider>
-          </FilterProvider>
-        </AuthProvider>
-      </Provider>
+    <Provider store={store}>
+      <AuthProvider>
+        <FilterProvider>
+          <I18nextProvider i18n={i18n}>
+            <SocketEventsHandler />
+            <ApiProvider>
+              <App />
+            </ApiProvider>
+          </I18nextProvider>
+        </FilterProvider>
+      </AuthProvider>
+    </Provider>
   );
 };
 

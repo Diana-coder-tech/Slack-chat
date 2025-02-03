@@ -5,7 +5,7 @@ const Message = ({ message }) => {
   const { clean } = useContext(FilterContext); // Получаем функцию clean
 
   if (!clean) {
-    console.error("Функция clean не найдена в контексте!");
+    console.error('Функция clean не найдена в контексте!');
     return null;
   }
 
