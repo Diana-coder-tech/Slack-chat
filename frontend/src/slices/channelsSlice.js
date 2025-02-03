@@ -1,6 +1,5 @@
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 import { createSelector } from 'reselect';
-
 import { fetchChannels } from './fetchData.js';
 
 const channelsAdapter = createEntityAdapter();
@@ -17,33 +16,22 @@ const channelsSlice = createSlice({
     addChannel: channelsAdapter.addOne,
     renameChannel: channelsAdapter.updateOne,
     removeChannel: (state, { payload }) => {
-      // Создаем новый объект состояния, чтобы избежать мутации
-      const newState = { ...state };
-      
-      if (newState.currentChannelId === payload) {
-        newState.currentChannelId = newState.ids[0] || null;
+      // Проверяем, был ли текущий канал удален, и обновляем currentChannelId
+      if (state.currentChannelId === payload) {
+        state.currentChannelId = state.ids[0] || null;
       }
-
-      // Используем адаптер для удаления канала
-      channelsAdapter.removeOne(newState, payload);
-
-      return newState; // Возвращаем обновленное состояние
+      channelsAdapter.removeOne(state, payload);
     },
-    changeChannel: (state, { payload }) => ({
-      ...state,
-      currentChannelId: payload,
-    }),
+    changeChannel: (state, { payload }) => {
+      state.currentChannelId = payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchChannels.fulfilled, (state, { payload }) => {
-      console.log('Каналы загружены:', payload); // Проверка загруженных каналов
-
-      // Создаем новый объект состояния, чтобы избежать мутации
-      const newState = { ...state };
-      channelsAdapter.setAll(newState, payload);
-      newState.currentChannelId = payload.length > 0 ? payload[0].id : null;
-
-      return newState; // Возвращаем обновленное состояние
+      // Загружаем каналы в состояние
+      channelsAdapter.setAll(state, payload);
+      // Если каналы есть, устанавливаем первый канал как текущий
+      state.currentChannelId = payload.length > 0 ? payload[0].id : null;
     });
   },
 });
