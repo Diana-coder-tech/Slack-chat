@@ -17,17 +17,17 @@ const channelsSlice = createSlice({
     addChannel: channelsAdapter.addOne,
     renameChannel: channelsAdapter.updateOne,
     removeChannel: (state, { payload }) => {
-      // Создаем копию состояния, чтобы избежать мутации
+      // Создаем новый объект состояния, чтобы избежать мутации
       const newState = { ...state };
-
+      
       if (newState.currentChannelId === payload) {
         newState.currentChannelId = newState.ids[0] || null;
       }
 
-      // Применяем изменение через channelsAdapter
+      // Используем адаптер для удаления канала
       channelsAdapter.removeOne(newState, payload);
-      
-      return newState; // Возвращаем новое состояние
+
+      return newState; // Возвращаем обновленное состояние
     },
     changeChannel: (state, { payload }) => ({
       ...state,
@@ -38,12 +38,12 @@ const channelsSlice = createSlice({
     builder.addCase(fetchChannels.fulfilled, (state, { payload }) => {
       console.log('Каналы загружены:', payload); // Проверка загруженных каналов
 
-      // Создаем новый объект состояния
+      // Создаем новый объект состояния, чтобы избежать мутации
       const newState = { ...state };
       channelsAdapter.setAll(newState, payload);
       newState.currentChannelId = payload.length > 0 ? payload[0].id : null;
 
-      return newState; // Возвращаем новое состояние
+      return newState; // Возвращаем обновленное состояние
     });
   },
 });
