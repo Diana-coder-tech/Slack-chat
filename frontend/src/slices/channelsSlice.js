@@ -1,6 +1,9 @@
+/* eslint-disable no-param-reassign */
+
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
-import { createSelector } from 'reselect';
-import { fetchChannels } from './fetchData.js';
+import { createSelector } from 'reselect'; // Добавлено: импорт createSelector
+
+import { fetchChannels } from './fetchData.js'; // Импортируем новый асинхронный thunk
 
 const channelsAdapter = createEntityAdapter();
 
@@ -12,45 +15,34 @@ const channelsSlice = createSlice({
   name: 'channels',
   initialState,
   reducers: {
-    addChannels: (state, { payload }) => {
-      channelsAdapter.addMany(state, payload);
-      if (!state.currentChannelId) {
-        const generalChannel = Object.values(state.entities).find(ch => ch.name === 'general');
-        state.currentChannelId = generalChannel ? generalChannel.id : state.ids[0] || null;
-      }
-    },
-    addChannel: (state, { payload }) => {
-      channelsAdapter.addOne(state, payload);
-    },
-    renameChannel: (state, { payload }) => {
-      const { id, name } = payload;
-      if (state.entities[id] && name) { // Проверяем, чтобы name не был пустым
-        channelsAdapter.updateOne(state, { id, changes: { name } });
-      }
-    },
+    addChannels: channelsAdapter.addMany,
+    addChannel: channelsAdapter.addOne,
+    renameChannel: channelsAdapter.updateOne,
     removeChannel: (state, { payload }) => {
-      channelsAdapter.removeOne(state, payload);
       if (state.currentChannelId === payload) {
-        const generalChannel = Object.values(state.entities).find(ch => ch.name === 'general');
-        state.currentChannelId = generalChannel ? generalChannel.id : state.ids[0] || null;
+        const newCurrentChannelId = state.ids[0];
+        state.currentChannelId = newCurrentChannelId;
       }
+      channelsAdapter.removeOne(state, payload);
     },
     changeChannel: (state, { payload }) => {
       state.currentChannelId = payload;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchChannels.fulfilled, (state, { payload }) => {
-      channelsAdapter.setAll(state, payload);
-      const generalChannel = payload.find(ch => ch.name === 'general');
-      state.currentChannelId = generalChannel ? generalChannel.id : payload[0]?.id || null;
-    });
+    builder
+      .addCase(fetchChannels.fulfilled, (state, { payload }) => {
+        channelsAdapter.setAll(state, payload); // Обновляем каналы
+        state.currentChannelId = payload.length > 0 ? payload[0].id : null;
+        // Устанавливаем первый канал активным
+      });
   },
 });
 
 export const { actions } = channelsSlice;
 const selectors = channelsAdapter.getSelectors((state) => state.channels);
 
+// Изменено: мемоизация channelsNames с помощью createSelector
 export const customSelectors = {
   allChannels: selectors.selectAll,
   channelsNames: createSelector(
@@ -59,6 +51,7 @@ export const customSelectors = {
   ),
   currentChannel: (state) => {
     const { currentChannelId } = state.channels;
+
     return selectors.selectById(state, currentChannelId);
   },
 };
