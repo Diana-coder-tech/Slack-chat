@@ -16,19 +16,23 @@ const channelsSlice = createSlice({
     addChannel: channelsAdapter.addOne,
     renameChannel: channelsAdapter.updateOne,
     removeChannel: (state, { payload }) => {
-      // Проверяем, был ли текущий канал удален, и обновляем currentChannelId
+      // Используем removeOne для корректного обновления состояния
       if (state.currentChannelId === payload) {
-        state.currentChannelId = state.ids[0] || null;
+        const firstChannelId = state.ids[0] || null;
+        channelsAdapter.removeOne(state, payload);
+        state.currentChannelId = firstChannelId;
+      } else {
+        channelsAdapter.removeOne(state, payload);
       }
-      channelsAdapter.removeOne(state, payload);
     },
     changeChannel: (state, { payload }) => {
+      // Просто обновляем currentChannelId с помощью мутирующего метода
       state.currentChannelId = payload;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchChannels.fulfilled, (state, { payload }) => {
-      // Загружаем каналы в состояние
+      // Обновляем все каналы через channelsAdapter
       channelsAdapter.setAll(state, payload);
       // Если каналы есть, устанавливаем первый канал как текущий
       state.currentChannelId = payload.length > 0 ? payload[0].id : null;
