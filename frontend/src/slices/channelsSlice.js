@@ -30,10 +30,11 @@ const channelsSlice = createSlice({
     }),
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchChannels.fulfilled, (state, { payload }) => ({
-      ...channelsAdapter.setAll(state, payload),
-      currentChannelId: payload.length > 0 ? payload[0].id : null,
-    }));
+    builder.addCase(fetchChannels.fulfilled, (state, { payload }) => {
+      console.log('Каналы загружены:', payload); // Проверка загруженных каналов
+      channelsAdapter.setAll(state, payload);
+      state.currentChannelId = payload.length > 0 ? payload[0].id : null;
+    });
   },
 });
 
