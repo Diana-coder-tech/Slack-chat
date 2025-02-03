@@ -33,6 +33,13 @@ export default [
       ...react.configs['jsx-runtime'].rules,
       ...reactHooks.configs.recommended.rules,
       'no-unused-vars': ['error', { varsIgnorePattern: '^React$' }],
+      'no-param-reassign': [
+      'error',
+      {
+        'props': true,
+        'ignorePropertyModificationsFor': ['state']
+      }
+    ],
 
       // Включение Airbnb и functional
       'import/extensions': 'off',

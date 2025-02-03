@@ -9,11 +9,14 @@ import filter from 'leo-profanity';
 import { actions as channelsActions } from '../../../slices/channelsSlice.js';
 import { actions as modalActions } from '../../../slices/modalSlice.js';
 
-const CloseChannel = ({ name, sharedClasses, activeClass, handleSelect }) => (
+const CloseChannel = ({
+  name, sharedClasses, activeClass, handleSelect
+}) => (
   <Button
     variant={activeClass ? 'secondary' : ''}
     className={cn(
-      sharedClasses,)}
+      sharedClasses
+    )}
     onClick={handleSelect}
   >
     <span className="me-1">#</span>
@@ -33,9 +36,9 @@ const OpenChannel = ({
         variant={activeClass ? 'secondary' : ''}
         className={cn(
           sharedClasses,
-          { 
-            'text-truncate': true 
-          }
+          {
+            'text-truncate': true,
+          },
         )}
         onClick={handleSelect}
       >

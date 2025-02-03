@@ -29,7 +29,7 @@ const AuthProvider = ({ children }) => {
 
   const getAuthHeader = useCallback(
     () => (user?.token ? { Authorization: `Bearer ${user.token}` } : {}),
-    [user]
+    [user],
   );
 
   const context = useMemo(
@@ -39,7 +39,7 @@ const AuthProvider = ({ children }) => {
       logOut,
       getAuthHeader,
     }),
-    [user, logIn, logOut, getAuthHeader]
+    [user, logIn, logOut, getAuthHeader],
   );
 
   return <AuthContext.Provider value={context}>{children}</AuthContext.Provider>;

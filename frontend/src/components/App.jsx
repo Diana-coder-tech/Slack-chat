@@ -16,7 +16,7 @@ import Nav from './common/Nav.jsx';
 
 const App = () => (
   <>
-    <div className='d-flex flex-column h-100'>
+    <div className="d-flex flex-column h-100">
       <Router>
         <Nav />
         <Routes>
@@ -34,7 +34,7 @@ const App = () => (
       </Router>
     </div>
     <ToastContainer
-      position='top-right'
+      position="top-right"
       autoClose={5000}
       hideProgressBar={false}
       newestOnTop={false}
@@ -43,7 +43,7 @@ const App = () => (
       pauseOnFocusLoss
       draggable
       pauseOnHover
-      theme='light'
+      theme="light"
     />
   </>
 );
